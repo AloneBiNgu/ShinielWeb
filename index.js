@@ -167,8 +167,9 @@ app.get("/", async (req, res) => {
 	res.status(200).send(JSON.stringify({Message: toSend}))
 })
 
+const PORT = process.env.PORT || 3000
 
-app.listen(3000 || process.env.PORT, () => {
+app.listen(PORT, () => {
 	console.log("OK")
 	if(!mongoose.connections[0].client) {
         mongoose.connect("mongodb+srv://AloneBiNgu:thanhngulol@cluster0.t4sbtjc.mongodb.net/Data", {
