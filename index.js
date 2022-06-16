@@ -168,7 +168,7 @@ app.get("/", async (req, res) => {
 })
 
 
-app.listen(3000 || process.env.port, () => {
+app.listen(3000 || process.env.PORT, () => {
 	console.log("OK")
 	if(!mongoose.connections[0].client) {
         mongoose.connect("mongodb+srv://AloneBiNgu:thanhngulol@cluster0.t4sbtjc.mongodb.net/Data", {
