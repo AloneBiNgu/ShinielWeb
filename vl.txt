@@ -1,0 +1,137 @@
+const express = require("express")
+const crypto = require("crypto")
+const mongoose = require("mongoose")
+
+const hash = (str) => {
+	return crypto.createHash('sha384').update(str).digest('hex')
+}
+
+const base64Encode = (str) => {
+	return Buffer.from(str).toString("base64")
+}
+
+const base64Decode = (str) => {
+	return Buffer.from(str, "base64").toString("ascii")
+}
+
+var LetterArgs = {}
+LetterArgs["A"] = "Lone"
+LetterArgs["B"] = "CAK"
+LetterArgs["C"] = "Bucu"
+LetterArgs["D"] = "MANO"
+LetterArgs["E"] = "NARUTO"
+LetterArgs["F"] = "IDK"
+LetterArgs["G"] = "ghe"
+LetterArgs["H"] = "NUNGVL"
+LetterArgs["I"] = "NHINCL"
+LetterArgs["J"] = "LON"
+LetterArgs["K"] = "HUCE"
+LetterArgs["L"] = "HUAT"
+LetterArgs["M"] = "DIME"
+LetterArgs["N"] = "DUMA"
+LetterArgs["O"] = "CL"
+LetterArgs["P"] = "VL"
+LetterArgs["Q"] = "MATDAY"
+LetterArgs["R"] = "ADU"
+LetterArgs["S"] = "CUNGMANH"
+LetterArgs["T"] = "ALIME"
+LetterArgs["U"] = "QUADU"
+LetterArgs["V"] = "DELL"
+LetterArgs["W"] = "MANH"
+LetterArgs["X"] = "VAYAK"
+LetterArgs["Y"] = "LOVE"
+LetterArgs["Z"] = "YEU"
+// -------------------------------
+LetterArgs["a"] = "GKE"
+LetterArgs["b"] = "OK"
+LetterArgs["c"] = "chien"
+LetterArgs["d"] = "uoc"
+LetterArgs["e"] = "chiuluon"
+LetterArgs["f"] = "vcl"
+LetterArgs["g"] = "fbi"
+LetterArgs["h"] = "clm"
+LetterArgs["i"] = "dmm"
+LetterArgs["j"] = "cac"
+LetterArgs["k"] = "hihi"
+LetterArgs["l"] = "ngaivl"
+LetterArgs["m"] = "nhincmm"
+LetterArgs["n"] = "dungma"
+LetterArgs["o"] = "huhu"
+LetterArgs["p"] = "chiuroi"
+LetterArgs["q"] = "thaidog"
+LetterArgs["r"] = "ngulol"
+LetterArgs["s"] = "chetdi"
+LetterArgs["t"] = "gaixinh"
+LetterArgs["u"] = "united"
+LetterArgs["v"] = "xxx"
+LetterArgs["w"] = "hiepdam"
+LetterArgs["x"] = "mupz"
+LetterArgs["y"] = "nunglon"
+LetterArgs["z"] = "ranuoc"
+// ----------------------------------------------
+
+function Trans(key) {
+	let Encode = ""
+	for (i = 0; i < key.length; i++) {
+		if (LetterArgs[key[i]] !== null) {
+			Encode += LetterArgs[key[i]]
+		}
+	}
+	return base64Encode(Encode) 
+}
+function DeTrans(key) {
+	key = base64Decode(key)
+	var properti = Object.getOwnPropertyNames(LetterArgs)
+	let Check = ""
+	let Code = ""
+	for (i = 0; i < key.length; i++) {
+		Check += key[i]
+		for (j = 0; j < properti.length; j++) {
+			if (LetterArgs[properti[j]] == Check) {
+				Check = ""
+				Code += properti[j]
+			}
+		}
+	}
+	return Code
+}
+
+function Reverse(key) {
+	let reverseKey = ""
+	for (var i = key.length-1; i >= 0; i--) {
+		reverseKey += key[i];
+	}
+	return reverseKey;
+}
+
+function Decode(index, key) {
+	return new Promise((resolve, reject) => {
+		if (index > 20) return resolve(key)
+		let reverseKey = Reverse(key)
+		//console.log(reverseKey)
+		let decodeKey = ""
+		for (var i = 0; i < reverseKey.length; i++) {
+			//console.log(key[i].charCodeAt())
+			decodeKey += String.fromCharCode(reverseKey[i].charCodeAt() - index)
+		}
+		if (decodeKey != authKey) {
+			return resolve(Decode(index + 1, key))
+		} else {
+			resolve(decodeKey)
+		}
+	})
+}
+
+const router = express.Router()
+
+router.get("/", async (req, res) => {
+	const rand = req.params.rand
+	const auth = req.params.authKey
+	let decodeAuth = await Decode(1, auth)
+	if (!rand || !auth) return res.status(401).send("Invalid request!")
+	if (decodeAuth != authKey) return res.status(401).send("Invalid key!")
+	const toSend = hash(rand + auth + decodeAuth)
+	res.status(200).send(toSend)
+})
+
+module.exports = router
