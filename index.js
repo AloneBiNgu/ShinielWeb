@@ -182,7 +182,7 @@ app.post("/", async(req, res) => {
 	if (!scriptFetch.ok) return
 	const text = await scriptFetch.text()
 	if (text) {
-		fs.writeFile(__dirname + "/Script/script.txt", text, (err, next) => {
+		fs.writeFileSync(__dirname + "/Script/script.txt", text, "utf8", (err, next) => {
 			if (err) {
 				next(err)
 			}
