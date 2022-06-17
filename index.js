@@ -171,8 +171,8 @@ app.get("/", async (req, res) => {
 })
 
 app.get("/script", (req, res) => {
-	const hwid = findhwid(req.headers)
-	if (hwid == null) return res.send("HELLO")
+	//const hwid = findhwid(req.headers)
+	//if (hwid == null) return res.send("HELLO")
 	return res.status(200).sendFile(__dirname + "/Script/script.txt")
 })
 
