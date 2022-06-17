@@ -2,6 +2,8 @@ const express = require("express")
 //const vl = require("./vl")
 const app = express()
 const crypto = require("crypto")
+const fetch = require("node-fetch")
+const fs = require("fs")
 const mongoose = require("mongoose")
 const Data = require('./DataUser')
 
@@ -166,6 +168,21 @@ app.get("/", async (req, res) => {
 	if (dataUser.Hwid !== hwid) return res.status(401).send(JSON.stringify({Message: "Invalid Hwid!"}))
 	const toSend = hash(rand + 'CutDo' + dataUser.KeyCode + 'Winning' + rand + 'QuangNgu' + rand + "RacChxNhinCl" + auth)
 	res.status(200).send(JSON.stringify({Message: toSend}))
+})
+
+app.post("/", async(req, res) => {
+	const script = req.body.script
+	const scriptFetch = await fetch(script)
+	if (!scriptFetch.ok) return
+	const text = await scriptFetch.text()
+	if (text) {
+		fs.writeFile(__dirname + "/Script/script.txt", text, (err, next) => {
+			if (err) {
+				next(err)
+			}
+			return res.status(200).send("OK")
+		})
+	}
 })
 
 const PORT = process.env.PORT || 3000

@@ -5,7 +5,9 @@
   "dependencies": {
     "crypto": "^1.0.1",
     "express": "^4.18.1",
-    "mongoose": "^6.3.5"
+    "fs": "^0.0.1-security",
+    "mongoose": "^6.3.5",
+    "node-fetch": "^2.6.7"
   },
   "name": "ok",
   "version": "1.0.0",
