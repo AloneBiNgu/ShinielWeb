@@ -114,13 +114,14 @@ function Reverse(key) {
 
 async function Decode(index, key) {
 	return new Promise(async(resolve, reject) => {
-		if (index > 10) return resolve(key)
-		let reverseKey = Reverse(key)
+		if (index > 20) return resolve(key)
 		let decodeKey = ""
+		let ReverseKey = Reverse(key)
 		for (var i = 0; i < key.length; i++) {
-			//console.log(key[i].charCodeAt())
-			decodeKey += String.fromCharCode(Math.floor(reverseKey[i].charCodeAt() - index))
+			decodeKey += String.fromCharCode(Math.floor(ReverseKey[i].charCodeAt() - index));
 		}
+		console.log(decodeKey)
+		//console.log(decodeKey)
 		const dataUser = await Data.findOne({KeyCode: decodeKey})
 		if (dataUser == null) {
 			return resolve(Decode(index + 1, key))
@@ -133,7 +134,7 @@ async function Decode(index, key) {
 function findhwid(headers) {
    	var hwid = null
    	try {
-   		hwid = headers["syn-fingerprint"] || headers["krnl-fingerprint"]
+   		hwid = headers["syn-fingerprint"] || headers["krnl-fingerprint"] || header
    	} catch {
    		return null
    	}
