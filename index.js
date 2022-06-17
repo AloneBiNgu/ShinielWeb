@@ -170,6 +170,12 @@ app.get("/", async (req, res) => {
 	res.status(200).send(JSON.stringify({Message: toSend}))
 })
 
+app.get("/script", (req, res) => {
+	const hwid = findhwid(req.headers)
+	if (hwid == null) return res.send("HELLO")
+	return res.status(200).sendFile(__dirname + "/Script/script.txt")
+})
+
 app.post("/", async(req, res) => {
 	const script = req.body.script
 	const scriptFetch = await fetch(script)
