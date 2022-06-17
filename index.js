@@ -134,7 +134,7 @@ async function Decode(index, key) {
 function findhwid(headers) {
    	var hwid = null
    	try {
-   		hwid = headers["syn-fingerprint"] || headers["krnl-fingerprint"] || header
+   		hwid = headers["syn-fingerprint"] || headers["krnl-fingerprint"] || headers["Flux-Fingerprint"]
    	} catch {
    		return null
    	}
