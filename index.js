@@ -11,6 +11,14 @@ const hash = (str) => {
 	return crypto.createHash('sha384').update(str).digest('hex')
 }
 
+const hash2 = (str) => {
+	return crypto.createHash('sha256').update(str).digest('hex')
+}
+
+const hash3 = (str) => {
+	return crypto.createHash('sha512').update(str).digest('hex')
+}
+
 const base64Encode = (str) => {
 	return Buffer.from(str).toString("base64")
 }
@@ -122,8 +130,6 @@ async function Decode(index, key) {
 		for (var i = 0; i < key.length; i++) {
 			decodeKey += String.fromCharCode(Math.floor(ReverseKey[i].charCodeAt() - index));
 		}
-		console.log(decodeKey)
-		//console.log(decodeKey)
 		const dataUser = await Data.findOne({KeyCode: decodeKey})
 		if (dataUser == null) {
 			return resolve(Decode(index + 1, key))
@@ -162,12 +168,16 @@ app.get("/", async (req, res) => {
 	if (dataUser.Hwid == "" || !dataUser.Hwid) {
 		dataUser.Hwid = hwid
 		await dataUser.save()
-		const toSend = hash(rand + 'CutDo' + dataUser.KeyCode + 'Winning' + rand + 'QuangNgu' + rand + "RacChxNhinCl" + auth)
-		return res.status(200).send(JSON.stringify({Message: toSend}))
+		const expRes = hash(rand + 'CutDo' + dataUser.KeyCode + 'Winning' + rand + 'QuangNgu' + rand + "RacChxNhinCl" + auth)
+		const expRes2 = hash2(rand + 'CutDo' + dataUser.KeyCode + 'Winning' + rand + 'QuangNgu' + rand + "RacChxNhinCl" + auth + "ShinielHub")
+		const expRes3 = hash3(rand + 'CutDo' + dataUser.KeyCode + 'Winning' + rand + 'QuangNgu' + rand + "RacChxNhinCl" + auth + "ShinielHub2")
+		return res.status(200).send(JSON.stringify({Message: expRes, Message2: expRes2, Message3: expRes3}))
 	}
 	if (dataUser.Hwid !== hwid) return res.status(401).send(JSON.stringify({Message: "Invalid Hwid!"}))
-	const toSend = hash(rand + 'CutDo' + dataUser.KeyCode + 'Winning' + rand + 'QuangNgu' + rand + "RacChxNhinCl" + auth)
-	res.status(200).send(JSON.stringify({Message: toSend}))
+	const expRes = hash(rand + 'CutDo' + dataUser.KeyCode + 'Winning' + rand + 'QuangNgu' + rand + "RacChxNhinCl" + auth)
+	const expRes2 = hash2(rand + 'CutDo' + dataUser.KeyCode + 'Winning' + rand + 'QuangNgu' + rand + "RacChxNhinCl" + auth + "ShinielHub")
+	const expRes3 = hash3(rand + 'CutDo' + dataUser.KeyCode + 'Winning' + rand + 'QuangNgu' + rand + "RacChxNhinCl" + auth + "ShinielHub2")
+	res.status(200).send(JSON.stringify({Message: expRes, Message2: expRes2, Message3: expRes3}))
 })
 
 app.get("/script", (req, res) => {
