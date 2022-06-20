@@ -5,6 +5,9 @@ const WhiteListSchema = new mongoose.Schema({
 		type: String,
 		required: true,
 	},
+	KeyCode2: {
+		type: String,
+	},
 	UserId: {
 		type: String,
 		required: true,

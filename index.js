@@ -130,9 +130,7 @@ async function Decode(index, key) {
 		for (var i = 0; i < key.length; i++) {
 			decodeKey += String.fromCharCode(Math.floor(ReverseKey[i].charCodeAt() - index));
 		}
-		console.log(decodeKey)
-		//console.log(decodeKey)
-		const dataUser = await Data.findOne({KeyCode: decodeKey})
+		const dataUser = await Data.findOne({KeyCode2: decodeKey})
 		if (dataUser == null) {
 			return resolve(Decode(index + 1, key))
 		} else {
@@ -162,21 +160,25 @@ app.get("/", async (req, res) => {
 	decodeAuth = await DeTrans(decodeAuth)
 	decodeAuth = await DeTrans(decodeAuth)
 	decodeAuth = await Decode(0, decodeAuth)
-	//console.log(decodeAuth)
-	const dataUser = await Data.findOne({KeyCode: decodeAuth})
+	const dataUser = await Data.findOne({KeyCode2: decodeAuth})
 	if (!dataUser) return res.status(401).send(JSON.stringify({Message: "Invalid Key!"}))
 	if (dataUser.IsUsing == false) return res.status(401).send(JSON.stringify({Message: "Please redeem key before using!"}))
 	if (dataUser.BlackList == true) return res.status(401).send(JSON.stringify({Message: "You have been blacklisted!"}))
 	if (dataUser.Hwid == "" || !dataUser.Hwid) {
 		dataUser.Hwid = hwid
 		await dataUser.save()
-		const toSend = hash(rand + 'CutDo' + dataUser.KeyCode + 'Winning' + rand + 'QuangNgu' + rand + "RacChxNhinCl" + auth)
-		
-		return res.status(200).send(JSON.stringify({Message: toSend}))
+		const expRes1 = hash(rand + 'CutDo' + dataUser.KeyCode2 + 'Winning' + rand + 'QuangNgu' + rand + "RacChxNhinCl" + auth)
+		const expRes2 = hash2(rand + 'CutDo' + dataUser.KeyCode2 + 'Winning' + rand + 'QuangNgu' + rand + "RacChxNhinCl" + auth + "ShinielHub")
+		const expRes3 = hash3(rand + 'CutDo' + dataUser.KeyCode2 + 'Winning' + rand + 'QuangNgu' + rand + "RacChxNhinCl" + auth + "ShinielHub2")
+		const lastCheck = hash3((("Key" + decodeAuth + "Alonecutephomaiqueahihi")))
+		return res.status(200).send(JSON.stringify({Message: expRes1, Message2: expRes2, Message3: expRes3, Message4: lastCheck}))
 	}
 	if (dataUser.Hwid !== hwid) return res.status(401).send(JSON.stringify({Message: "Invalid Hwid!"}))
-	const toSend = hash(rand + 'CutDo' + dataUser.KeyCode + 'Winning' + rand + 'QuangNgu' + rand + "RacChxNhinCl" + auth)
-	res.status(200).send(JSON.stringify({Message: toSend}))
+	const expRes1 = hash(rand + 'CutDo' + dataUser.KeyCode2 + 'Winning' + rand + 'QuangNgu' + rand + "RacChxNhinCl" + auth)
+	const expRes2 = hash2(rand + 'CutDo' + dataUser.KeyCode2 + 'Winning' + rand + 'QuangNgu' + rand + "RacChxNhinCl" + auth + "ShinielHub")
+	const expRes3 = hash3(rand + 'CutDo' + dataUser.KeyCode2 + 'Winning' + rand + 'QuangNgu' + rand + "RacChxNhinCl" + auth + "ShinielHub2")
+	const lastCheck = hash3(("Key" + decodeAuth + "Alonecutephomaiqueahihi"))
+	return res.status(200).send(JSON.stringify({Message: expRes1, Message2: expRes2, Message3: expRes3, Message4: lastCheck}))
 })
 
 app.get("/script", (req, res) => {
