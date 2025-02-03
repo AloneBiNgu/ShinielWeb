@@ -207,7 +207,7 @@ const PORT = process.env.PORT || 3000
 app.listen(PORT, () => {
 	console.log("OK")
 	if(!mongoose.connections[0].client) {
-        mongoose.connect("mongodb+srv://AloneBiNgu:thanhngulol@cluster0.t4sbtjc.mongodb.net/Data", {
+        mongoose.connect("", {
             useUnifiedTopology: true,
             useNewUrlParser: true,
         },{server: { auto_reconnect: true }}).then(() => {
